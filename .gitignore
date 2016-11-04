@@ -1,0 +1,11 @@
+#Ignore executables
+exe
+Exe
+testing_*
+*.out
+
+#Fiche TP 3
+TP3-SE2-2016-2017.pdf
+
+# ignore Abdeldjalil's notes
+myNotes
