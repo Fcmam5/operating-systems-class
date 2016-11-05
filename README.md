@@ -3,8 +3,10 @@
 * Reading for the homework
     * [pthread_create](http://man7.org/linux/man-pages/man3/pthread_create.3.html)
     * [pthread_join](http://pubs.opengroup.org/onlinepubs/9699919799/functions/pthread_join.html)
-    * [Creating multiple Threads](https://youtu.be/1ks-oMotUjc) Refreshing memory 
+    * [Creating multiple Threads](https://youtu.be/1ks-oMotUjc) Refreshing memory
+
 ### Solving the OS class homework
+
 #### TP3: Threads POSIX, Mutex and Sémaphores
 Useful ressources:
 Passing arguments in C
