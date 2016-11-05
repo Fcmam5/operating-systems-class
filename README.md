@@ -4,6 +4,8 @@
     * [pthread_create](http://man7.org/linux/man-pages/man3/pthread_create.3.html)
     * [pthread_join](http://pubs.opengroup.org/onlinepubs/9699919799/functions/pthread_join.html)
     * [Creating multiple Threads](https://youtu.be/1ks-oMotUjc) Refreshing memory
+    * [POSIX semaphores](http://www.csc.villanova.edu/~mdamian/threads/posixsem.html)
+    * [Linux tutorial: POSIX threads](http://www.cs.cmu.edu/afs/cs/academic/class/15492-f07/www/pthreads.html)
 
 ### Solving the OS class homework
 
