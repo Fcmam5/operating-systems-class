@@ -29,17 +29,16 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < nbThreads; i++) {
             rc = pthread_create(&threads[i], NULL, fonctionThread,NULL);
             //TODO: it gives a warning, I should fix it
-        }
-
-        for (int i = 0; i < nbThreads; i++) {
-            pthread_join(threads[i], NULL);
             if(rc){
                 printf("Error creating thread, error code= %d\n", rc);
                 exit(-1);
             }
         }
-        pthread_exit(0);
 
+        for (int i = 0; i < nbThreads; i++) {
+            pthread_join(threads[i], NULL);
+        }
+        pthread_exit(0);
         return 0;
     }
     else{
