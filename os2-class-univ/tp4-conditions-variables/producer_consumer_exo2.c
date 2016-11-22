@@ -7,6 +7,7 @@
 #include <pthread.h>
 
 #define N 5 //buffer size
+#define NB 3 // 3 threads each
 
 char buffer[N];
 int nextin = 0, nextout = 0; //indices d’entrée et de sortie du buffer
@@ -17,7 +18,7 @@ pthread_cond_t notempty = PTHREAD_COND_INITIALIZER;
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 // déposer un caractère x dans le buffer
-void produce_char ( char x){
+void produce_char( char x){
     for (int i = 0; i < N; i++) {
         if (count == N)
             pthread_cond_wait(&notfull,&mutex);
@@ -32,7 +33,7 @@ void produce_char ( char x){
 }
 
 /* Fonction exécutée par le thread consommateur */
-void take (char *x) {
+void take(char *x) {
     // retirer un caractère du buffer
     for (int i = 0; i < N; i++) {
         if (count == 0)
@@ -49,17 +50,26 @@ void take (char *x) {
 
 
 int main(int argc, char const *argv[]) {
-    pthread_t producer;
-    pthread_t consumer;
+    pthread_t producer[NB];
+    pthread_t consumer[NB];
 
-    printf("I will hack %s\n", argv[1]);
-    if(pthread_create(&producer,NULL,(void *)produce_char,(void *)argv[1])){
-        printf("Error creating thread \n");
-        exit(-1);
+    char initialData[N];
+    printf("Filling the initialData\n");
+    for (int i = 0; i < N; i++) {
+        initialData[i] = 97+rand()%27;
+        printf("%c ", initialData[i]);
     }
-    if(pthread_create(&consumer,NULL,(void *)take,NULL)){
-        printf("Error creating thread\n");
-        exit(-1);
+
+    printf("\nCreating Threads\n");
+    for (int i = 0; i < NB; i++) {
+        if(pthread_create(&producer[i],NULL,(void *)produce_char,(void *)initialData[i])){
+            printf("Error creating thread \n");
+            exit(-1);
+        }
+        if(pthread_create(&consumer[i],NULL,(void *)take,NULL)){
+            printf("Error creating thread\n");
+            exit(-1);
+        }
     }
 
     printf("Waiting producer to finish\n");
@@ -67,6 +77,9 @@ int main(int argc, char const *argv[]) {
     printf("Waiting consumer to finish\n");
     pthread_join(consumer,NULL);
 
+    for (int i = 0; i < N; i++) {
+        printf("%c ", initialData[i]);
+    }
     pthread_cond_destroy(&notfull);
     pthread_cond_destroy(&notempty);
     pthread_mutex_destroy(&mutex);
