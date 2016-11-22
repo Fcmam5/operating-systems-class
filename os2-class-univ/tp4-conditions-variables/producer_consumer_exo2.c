@@ -5,11 +5,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <pthread.h>
-#include <semaphore.h>
 
-#define N 100 //buffer size
-#define nbProd 5 //consumers
-#define nbCons 5 //producers
+#define N 5 //buffer size
 
 char buffer[N];
 int nextin = 0, nextout = 0; //indices d’entrée et de sortie du buffer
@@ -52,30 +49,27 @@ void take (char *x) {
 
 
 int main(int argc, char const *argv[]) {
-    pthread_t producers[nbProd];
-    pthread_t consumers[nbCons];
+    pthread_t producer;
+    pthread_t consumer;
 
-    for (int i = 0; i < nbProd; i++) {
-        if(pthread_create(producers[i],NULL,(void *)produce_char,(void *)i)){
-            printf("Error creating thread nb:%d\n", i+1);
-            exit(-1);
-        }
+    printf("I will hack %s\n", argv[1]);
+    if(pthread_create(&producer,NULL,(void *)produce_char,(void *)argv[1])){
+        printf("Error creating thread \n");
+        exit(-1);
     }
-
-    for (int i = 0; i < nbCons; i++) {
-        if(pthread_create(consumers[i],NULL,(void *)take,NULL)){
-            printf("Error creating thread nb:%d\n", i+1);
-            exit(-1);
-        }
-    }
-    printf("Waiting producers to finish\n");
-    for (int i = 0; i < nbProd; i++) {
-        pthread_join(producers[i],NULL);
+    if(pthread_create(&consumer,NULL,(void *)take,NULL)){
+        printf("Error creating thread\n");
+        exit(-1);
     }
 
-    printf("Waiting consumers to finish\n");
-    for (int i = 0; i < nbCons; i++) {
-        pthread_join(consumers[i],NULL);
-    }
+    printf("Waiting producer to finish\n");
+    pthread_join(producer,NULL);
+    printf("Waiting consumer to finish\n");
+    pthread_join(consumer,NULL);
+
+    pthread_cond_destroy(&notfull);
+    pthread_cond_destroy(&notempty);
+    pthread_mutex_destroy(&mutex);
+
     return 0;
 }
