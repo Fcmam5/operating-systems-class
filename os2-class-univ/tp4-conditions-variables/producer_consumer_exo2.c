@@ -62,7 +62,7 @@ int main(int argc, char const *argv[]) {
 
     printf("\nCreating Threads\n");
     for (int i = 0; i < NB; i++) {
-        if(pthread_create(&producer[i],NULL,(void *)produce_char,(void *)initialData[i])){
+        if(pthread_create(&producer[i],NULL,(void *)produce_char,(void *)&initialData[i])){
             printf("Error creating thread \n");
             exit(-1);
         }
@@ -73,9 +73,13 @@ int main(int argc, char const *argv[]) {
     }
 
     printf("Waiting producer to finish\n");
-    pthread_join(producer,NULL);
+    for (int i = 0; i < NB; i++) {
+        pthread_join(producer[i],NULL);
+    }
     printf("Waiting consumer to finish\n");
-    pthread_join(consumer,NULL);
+    for (int i = 0; i < NB; i++) {
+        pthread_join(consumer[i],NULL);
+    }
 
     for (int i = 0; i < N; i++) {
         printf("%c ", initialData[i]);
